@@ -24,7 +24,16 @@ app.get('/', function(req, res){
 // /files/* is accessed via req.params[0]
 // but here we name it :file
 app.get('/files/*file', function (req, res, next) {
-  res.download(req.params.file.join('/'), { root: FILES_DIR }, function (err) {
+  var filePath = path.normalize(req.params.file.join('/'));
+  var resolvedPath = path.resolve(FILES_DIR, filePath);
+
+  if (resolvedPath !== FILES_DIR && !resolvedPath.startsWith(FILES_DIR + path.sep)) {
+    res.statusCode = 404;
+    res.send('Cant find that file, sorry!');
+    return;
+  }
+
+  res.download(filePath, { root: FILES_DIR }, function (err) {
     if (!err) return; // file sent
     if (err.status !== 404) return next(err); // non-404 error
     // file for download not found

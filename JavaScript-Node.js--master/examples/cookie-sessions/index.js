@@ -9,8 +9,12 @@ var express = require('../../');
 
 var app = module.exports = express();
 
+if (!process.env.SESSION_SECRET) {
+  throw new Error('SESSION_SECRET must be set');
+}
+
 // add req.session cookie support
-app.use(cookieSession({ secret: process.env.SESSION_SECRET || 'replace-with-secure-secret' }));
+app.use(cookieSession({ secret: process.env.SESSION_SECRET }));
 
 // do something with the session
 app.get('/', function (req, res) {
