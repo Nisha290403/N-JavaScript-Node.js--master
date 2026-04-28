@@ -12,11 +12,16 @@ var session = require('express-session');
 
 var app = express();
 
+var sessionSecret = process.env.SESSION_SECRET;
+if (!sessionSecret) {
+  throw new Error('SESSION_SECRET must be set');
+}
+
 // Populates req.session
 app.use(session({
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
-  secret: 'keyboard cat'
+  secret: sessionSecret
 }));
 
 app.get('/', function(req, res){
