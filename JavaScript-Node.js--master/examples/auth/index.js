@@ -18,11 +18,17 @@ app.set('views', path.join(__dirname, 'views'));
 
 // middleware
 
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: false, limit: '100kb' }))
 app.use(session({
   resave: false, // don't save session if unmodified
   saveUninitialized: false, // don't create session until something stored
-  secret: 'shhhh, very secret'
+  secret: process.env.SESSION_SECRET,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 1000 * 60 * 15
+  }
 }));
 
 // Session-persisted message middleware
