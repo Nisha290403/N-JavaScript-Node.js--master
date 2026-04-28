@@ -16,7 +16,7 @@ if (process.env.NODE_ENV !== 'test') app.use(logger(':method :url'))
 // req.cookies and req.signedCookies
 // when the secret is passed, used
 // for signing the cookies.
-app.use(cookieParser('my secret here'));
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // parses x-www-form-urlencoded
 app.use(express.urlencoded())
