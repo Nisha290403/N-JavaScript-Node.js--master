@@ -10,7 +10,7 @@ var express = require('../../');
 var app = module.exports = express();
 
 // add req.session cookie support
-app.use(cookieSession({ secret: 'manny is cool' }));
+app.use(cookieSession({ secret: process.env.SESSION_SECRET || 'replace-with-secure-secret' }));
 
 // do something with the session
 app.get('/', function (req, res) {
